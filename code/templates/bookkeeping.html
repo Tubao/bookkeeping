@@ -1,0 +1,313 @@
+<!DOCTYPE html> <html>     
+<head>        
+ <meta charset="UTF-8">        
+ <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">         
+<title>记账：{{shopid}}</title>         
+  
+<script src="../static/style/jquery-1.12.3.min.js"></script>
+<script src="../static/style/jquery-ui.js"></script> 
+
+<link href="../static/style/jquery-ui.css" rel="stylesheet">
+<link href="../static/style/jquery-ui.theme.min.css" rel="stylesheet">
+<script src="../static/style/jquery-ui-datepicker-zh-CN.js"></script> 
+<script src="../static/style/jquery-ui.multidatespicker.js"></script> 
+<link rel="stylesheet" href="../static/style/mdp.css">
+<link rel="stylesheet" href="../static/style/jquery.mobile-1.4.5.min.css">
+<script src="../static/style/jquery.mobile-1.4.5.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+			var amount_payoff = 0;
+			$("#bklist_payoff li").each(function (i) {
+			amount_payoff = amount_payoff + parseFloat($(this).attr("custom2"));
+    		});
+			$("#amount_payoff").text(amount_payoff);
+			
+			var amount_income = 0;
+			$("#bklist_income li").each(function (i) {
+			amount_income = amount_income + parseFloat($(this).attr("custom2"));
+    		});
+			$("#amount_income").text(amount_income);
+
+   	$("#dd_div").css("display","block"); 
+  	$( "#datepicker_single" ).datepicker({
+      altField: "#ddate_txt",
+      dateFormat: "yymmdd",
+      inline: false,
+      defaultDate: "{{datadate}}",
+      onSelect:function (dateText, inst) {
+      	document.location = "/newBookkeeping?shopid={{shopid}}&dd="+dateText;      	
+      }
+    } );
+    $("#bkitem_payoff_content_txt").autocomplete({
+  			minLength: 0,
+  			minChars:0,
+  			max:5,
+  			source: [ "c++", "java", "php", "coldfusion", "javascript", "asp", "ruby" ]  			
+		});
+		$("#bkitem_payoff_content_txt").autocomplete("option","source","/getbklist?type=0&shopid={{shopid}}");
+  	 $(".olditem_payoff").click(function (event) {
+			if (confirm("确定要删除此项吗？")) {
+    			   $("#bkls_payoff").text($("#bklist_payoff li").length-1);
+    				$(this).parent().remove();
+    				event.preventDefault();
+    				$("#editmode").text("有修改");
+    				var amount_payoff = 0;
+			$("#bklist_payoff li").each(function (i) {
+			amount_payoff = amount_payoff + parseFloat($(this).attr("custom2"));
+    		});
+			$("#amount_payoff").text(amount_payoff);
+   			 }   			 	
+		});
+		$("#payoff_collapse_div").collapsible( "expand" );
+		$("#addbklitembt_payoff").click(function (event) {
+     if ($("#bkitem_payoff_content_txt").val().trim() == "" || $("#bkitem_payoff_amount_txt").val().trim() == "") {
+     		alert("内容和金额都不能为空");  
+			event.preventDefault();
+			return; 
+     }
+		var mynum = Math.floor(Math.random() * ( 10000 + 1));
+      $("#payoff_collapse_div").collapsible( "expand" );
+      var str = "<li data-icon='delete' custom1='" + $("#bkitem_payoff_content_txt").val() + "' custom2='"+$("#bkitem_payoff_amount_txt").val() +  "' custom3='"+$("#bkitem_payoff_bak_txt").val() + "'><a href='#' id='delbklitem_" + $("#bkitem_payoff_content_txt").val() + mynum + "'>" + $("#bkitem_payoff_content_txt").val() + "&nbsp;&nbsp;" + $("#bkitem_payoff_amount_txt").val() + "元&nbsp;&nbsp;" + $("#bkitem_payoff_bak_txt").val() + "</a></li>";
+    	$("#bklist_payoff").append(str);
+    	$("#bklist_payoff").listview("refresh");
+    	$("#bkls_payoff").text($("#bklist_payoff li").length);     
+     $("#editmode").text("有修改");
+     var amount_payoff = 0;
+			$("#bklist_payoff li").each(function (i) {
+			amount_payoff = amount_payoff + parseFloat($(this).attr("custom2"));
+    		});
+			$("#amount_payoff").text(amount_payoff);
+     $("#delbklitem_" + $("#bkitem_payoff_content_txt").val() + mynum).click(function (event) {
+    			
+    			
+    			if (confirm("确定要删除此项吗？")) {
+    			   $("#bkls_payoff").text($("#bklist_payoff li").length-1);
+    				$(this).parent().remove();
+    				event.preventDefault();
+    				$("#editmode").text("有修改");
+    				var amount_payoff = 0;
+			$("#bklist_payoff li").each(function (i) {
+			amount_payoff = amount_payoff + parseFloat($(this).attr("custom2"));
+    		});
+			$("#amount_payoff").text(amount_payoff);
+   			 }
+   			 	
+    			});
+    		$("#bkitem_payoff_content_txt").val("");
+			$("#bkitem_payoff_amount_txt").val("");
+			$("#bkitem_payoff_bak_txt").val("");
+    		event.preventDefault();
+     
+     
+     });
+     
+     $("#bkitem_income_content_txt").autocomplete({
+  			minLength: 0,
+  			minChars:0,
+  			max:5,
+  			source: [ "c++", "java", "php", "coldfusion", "javascript", "asp", "ruby" ]  			
+		});
+		$("#bkitem_income_content_txt").autocomplete("option","source","/getbklist?type=1&shopid={{shopid}}");
+  	 $(".olditem_income").click(function (event) {
+			if (confirm("确定要删除此项吗？")) {
+    			   $("#bkls_income").text($("#bklist_income li").length-1);
+    				$(this).parent().remove();
+    				event.preventDefault();
+    				$("#editmode").text("有修改");
+    				var amount_income = 0;
+			$("#bklist_income li").each(function (i) {
+			amount_income = amount_income + parseFloat($(this).attr("custom2"));
+    		});
+			$("#amount_income").text(amount_income);
+   			 }   			 	
+		});
+		$("#income_collapse_div").collapsible( "expand" );
+		$("#addbklitembt_income").click(function (event) {
+     if ($("#bkitem_income_content_txt").val().trim() == "" || $("#bkitem_income_amount_txt").val().trim() == "") {
+     		alert("内容和金额都不能为空");  
+			event.preventDefault();
+			return; 
+     }
+		var mynum = Math.floor(Math.random() * ( 10000 + 1));
+      $("#income_collapse_div").collapsible( "expand" );
+      var str = "<li data-icon='delete' custom1='" + $("#bkitem_income_content_txt").val() + "' custom2='"+$("#bkitem_income_amount_txt").val() + "' custom3='"+$("#bkitem_income_bak_txt").val() + "'><a href='#' id='delbklitem_" + $("#bkitem_income_content_txt").val() + mynum + "'>" + $("#bkitem_income_content_txt").val() + "&nbsp;&nbsp;" + $("#bkitem_income_amount_txt").val() + "元&nbsp;&nbsp;" + $("#bkitem_income_bak_txt").val() + "</a></li>";
+    	$("#bklist_income").append(str);
+    	$("#bklist_income").listview("refresh");
+    	$("#bkls_income").text($("#bklist_income li").length);     
+     $("#editmode").text("有修改");
+     var amount_income = 0;
+			$("#bklist_income li").each(function (i) {
+			amount_income = amount_income + parseFloat($(this).attr("custom2"));
+    		});
+			$("#amount_income").text(amount_income);
+     $("#delbklitem_" + $("#bkitem_income_content_txt").val() + mynum).click(function (event) {
+    			
+    			
+    			if (confirm("确定要删除此项吗？")) {
+    			   $("#bkls_income").text($("#bklist_income li").length-1);
+    				$(this).parent().remove();
+    				event.preventDefault();
+    				$("#editmode").text("有修改");
+			var amount_income = 0;
+			$("#bklist_income li").each(function (i) {
+			amount_income = amount_income + parseFloat($(this).attr("custom2"));
+    		});
+			$("#amount_income").text(amount_income);
+   			 }
+   			 	
+    			});
+    		$("#bkitem_income_content_txt").val("");
+			$("#bkitem_income_amount_txt").val("");
+			$("#bkitem_income_bak_txt").val("");
+    		event.preventDefault();     
+     });
+     $("#confirmbt").click(function (event) {
+     		 var json_payoff = '{"data":[ '; 
+    		$("#bklist_payoff li").each(function (i) {
+    			json_payoff = json_payoff + '{"content":"'+ $(this).attr("custom1") + '","amount":"' + $(this).attr("custom2") + '","bak":"' + $(this).attr("custom3") + '"},';
+    			
+    		});
+    		json_payoff = json_payoff.substr(0,json_payoff.length-1) + ']}';
+    		if (json_payoff.length<3) {
+    			json_payoff="";
+    		}
+			$("#json_payoff").val(json_payoff);
+			var json_income = '{"data":[ '; 
+    		$("#bklist_income li").each(function (i) {
+    			json_income = json_income + '{"content":"'+ $(this).attr("custom1") + '","amount":"' + $(this).attr("custom2") + '","bak":"' + $(this).attr("custom3") + '"},';
+    			
+    		});
+    		json_income = json_income.substr(0,json_income.length-1) + ']}';
+    		if (json_income.length<3) {
+    			json_income="";
+    		}
+			$("#json_income").val(json_income);
+    		//alert($("#json_payoff").val());
+    		$("form").submit();
+    		event.preventDefault();    	 
+    	});
+ })
+</script>
+<script type="text/javascript" >
+function gopre(){
+document.location = "/newBookkeeping?shopid={{shopid}}&dd={{predd}}";
+}
+function gonext(){
+document.location = "/newBookkeeping?shopid={{shopid}}&dd={{nextdd}}";
+}
+
+</script>
+  <style type="text/css">
+.full-width-slider input{
+display: none;
+}
+.full-width-slider .ui-slider-track{
+margin-left: 2%;
+width: 96%;
+}
+.onlydate  .ui-datepicker th{
+	display: none;
+}
+.onlydate  .ui-datepicker .ui-datepicker-header {
+	display: none;
+}
+.footer-button-left,.footer-button-right {
+position: absolute;
+margin: 0;
+top: auto;
+bottom: 0.24em;
+}
+.footer-button-left {
+left: 0.4em;
+}
+.footer-button-right {
+right: 0.4em;
+}
+</style>
+</head> 
+<body>
+
+<form method="post" action="/newBookkeeping">
+<div data-role="page" id="page1">
+
+<div id="dd_div">
+<br>
+<a href="javascript:gopre()" data-ajax="false" class="ui-btn ui-btn-left  ui-corner-all ui-btn-icon-left ui-icon-carat-l ui-mini" style="margin:0;margin-top:10px;padding-top:5px;padding-bottom:5px">上一天</a>
+<div  align="center">
+<label for="ddate_txt">{{shopid}}&nbsp;(<span id="editmode">{%if saved=='1'%}已保存{%else%}有修改{%end%}</span>)&nbsp;日期: &nbsp;</label>
+<input type="text" id="datepicker_single" value="{{datadate}}">
+<input type="hidden" id="ddate_txt" name="ddate_txt" value="{{datadate}}" >
+<input type="hidden" id="shopid_txt" name="shopid_txt" value="{{shopid}}" >
+</div>
+<a href="javascript:gonext()" data-ajax="false" class="ui-btn ui-btn-right ui-btn-icon-right ui-corner-all ui-icon-carat-r ui-mini" style="margin:0;margin-top:10px;padding-top:5px;padding-bottom:5px">下一天</a>
+
+<br>
+</div>
+<div id="bklist_payoff_div" >
+
+<div id="payoff_collapse_div" data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" >
+<h3 >支出项（<span id="bkls_payoff">{{len(bklist_payoff)}}</span>项，总金额:<span id="amount_payoff"></span>元）</h3>
+<input type="hidden" id="json_payoff" name="json_payoff">
+<ul id="bklist_payoff" data-role="listview" data-inset="true">
+{%for item in bklist_payoff%}
+	<li data-icon='delete' custom1='{{item[3]}}' custom2='{{item[4]}}' custom3='{{item[5]}}'><a href="#" id='delbklitem_{{item[0]}}' class="olditem_payoff">{{item[3]}}&nbsp;&nbsp;{{item[4]}}元&nbsp;&nbsp;{{item[5]}}</a></li>
+{%end%}
+</ul>
+</div>
+<fieldset class="ui-grid-a">
+<div class="ui-block-a" style="width:50%"><label for="bkitem_payoff_content_txt" class="ui-hidden-accessible">bklist: </label>
+<input type="text" id="bkitem_payoff_content_txt" name="bkitem_payoff_content_txt" size="20" placeholder="支出内容" >
+</div>
+<div class="ui-block-b" style="width:25%"><label for="bkitem_payoff_amount_txt" class="ui-hidden-accessible">bklist: </label>
+<input type="text" id="bkitem_payoff_amount_txt" name="bkitem_payoff_amount_txt" size="7" placeholder="金额(元)" >
+</div>
+</fieldset>
+<fieldset class="ui-grid-a">
+<div class="ui-block-a" style="width:75%"><label for="bkitem_payoff_bak_txt" class="ui-hidden-accessible">bklist: </label>
+<input type="text" id="bkitem_payoff_bak_txt" name="bkitem_payoff_bak_txt" size="40" placeholder="备注" >
+</div>
+<div class="ui-block-b" style="width:25%;vertical-align: middle;margin-top:3px">
+<a href="#" data-ajax="false" class="ui-btn ui-corner-all ui-btn-icon-right ui-icon-plus ui-mini "  id="addbklitembt_payoff" >添加</a>
+
+</fieldset>
+</div>
+
+<div id="bklist_income_div" >
+
+<div id="income_collapse_div" data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" >
+<h3 >收入项（<span id="bkls_income">{{len(bklist_income)}}</span>项，总金额:<span id="amount_income"></span>元）</h3>
+<input type="hidden" id="json_income" name="json_income">
+<ul id="bklist_income" data-role="listview" data-inset="true">
+{%for item in bklist_income%}
+	<li data-icon='delete' custom1='{{item[3]}}' custom2='{{item[4]}}'  custom3='{{item[5]}}'><a href="#" id='delbklitem_{{item[0]}}' class="olditem_income">{{item[3]}}&nbsp;&nbsp;{{item[4]}}元&nbsp;&nbsp;{{item[5]}}</a></li>
+{%end%}
+</ul>
+</div>
+<fieldset class="ui-grid-a">
+<div class="ui-block-a" style="width:50%"><label for="bkitem_income_content_txt" class="ui-hidden-accessible">bklist: </label>
+<input type="text" id="bkitem_income_content_txt" name="bkitem_income_content_txt" size="20" placeholder="收入内容" >
+</div>
+<div class="ui-block-b" style="width:25%"><label for="bkitem_income_amount_txt" class="ui-hidden-accessible">bklist: </label>
+<input type="text" id="bkitem_income_amount_txt" name="bkitem_income_amount_txt" size="7" placeholder="金额(元)" >
+</div>
+</fieldset>
+<fieldset class="ui-grid-a">
+<div class="ui-block-a" style="width:75%"><label for="bkitem_income_bak_txt" class="ui-hidden-accessible">bklist: </label>
+<input type="text" id="bkitem_income_bak_txt" name="bkitem_income_bak_txt" size="20" placeholder="备注" >
+</div>
+<div class="ui-block-c" style="width:25%;vertical-align: middle;margin-top:3px">
+<a href="#" data-ajax="false" class="ui-btn ui-corner-all ui-btn-icon-right ui-icon-plus ui-mini "  id="addbklitembt_income" >添加</a>
+
+</fieldset>
+</div>
+
+<a href="#" data-ajax="false"  class="ui-btn ui-corner-all ui-shadow ui-btn-icon-left ui-icon-check " id="confirmbt">保存</a>
+
+
+
+
+
+ </div>
+ </form>
+</body>
+</html>

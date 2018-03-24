@@ -1,0 +1,46 @@
+<!DOCTYPE html> <html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>记账{{shopid}}</title>
+    <script src="../static/style/jquery-1.12.3.min.js"></script>
+    <script src="../static/style/jquery.mobile-1.4.5.min.js"></script>
+    <link rel="stylesheet" href="../static/style/jquery.mobile-1.4.5.min.css">
+
+    <script type="text/javascript" >
+        $(function() {
+            $("#confirmbt").click(function (event) {
+                if ($("#passwd_txt").val().length==0) {
+                    alert("口令不能为空");
+                    $("#passwd_txt").focus();
+                    event.preventDefault();
+                    return;
+                };
+
+                $("form").submit();
+                event.preventDefault();
+            });
+        });
+    </script>
+</head>
+<body>
+<div data-role="page" id="page1">
+    <form action="/bklogin" method="post" data-Ajax=false>
+        <input type="hidden" id="shopid_txt" name="shopid_txt" value="{{shopid}}">
+        <input type="hidden" id="dd_txt" name="dd_txt" value="{{dd}}">
+    <div class="ui-body ui-body-a ui-corner-all">
+              <p style="text-align:center">安全口令</p>
+
+
+    <div class="ui-block-a" style="width:100%"><label for="passwd_txt" class="ui-hidden-accessible">passwd text: </label>
+        <input type="text" id="passwd_txt" name="passwd_txt" size="20" placeholder="输入安全口令" >
+    </div>
+    <div class="ui-block-a" style="width:100%;text-align:center">
+        <a href="#" data-ajax="false"  class="ui-btn ui-corner-all ui-shadow ui-btn-icon-left ui-icon-check " id="confirmbt">确定</a>
+    </div>
+    </div>
+    </form>
+</div>
+
+</body>
+</html>

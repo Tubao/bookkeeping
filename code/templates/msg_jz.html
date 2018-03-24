@@ -1,0 +1,22 @@
+<!DOCTYPE html> <html>     
+<head>        
+ <meta charset="UTF-8">        
+ <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">         
+<title>记账</title>     
+<script src="../static/style/jquery-1.12.3.min.js"></script>
+<script src="../static/style/jquery.mobile-1.4.5.min.js"></script> 
+<link rel="stylesheet" href="../static/style/jquery.mobile-1.4.5.min.css">
+
+</head> 
+<body>
+<div data-role="page" id="page1">
+<h3 class="ui-bar ui-bar-a ui-corner-all" style="text-align:center">{{msg_title}}</h3>
+<div class="ui-body ui-body-a ui-corner-all">
+      <p style="text-align:center">{{msg_desc}}</p>
+</div>
+
+<a href="{{msg_url}}" data-ajax="false"  class="ui-btn ui-corner-all ui-shadow ui-btn-icon-right ui-icon-check " id="confirmbt">下一天</a>
+
+</div>
+</body>
+</html>
